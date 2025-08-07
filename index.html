@@ -29,9 +29,25 @@
       50% { transform: scale(1.05); box-shadow: 0 0 48px 4px rgba(243, 198, 230, 0.8);}
       100% { transform: scale(1); box-shadow: 0 0 32px 0 rgba(243, 198, 230, 0.5);}
     }
+    audio {
+      display: none;
+    }
   </style>
 </head>
 <body>
   <img src="libur.webp" alt="Libur Harinfood" class="center-img">
+  <audio id="musik-libur" src="libur.mp3" autoplay loop></audio>
+  <script>
+    // Untuk memastikan audio autoplay di beberapa browser, coba play via JavaScript
+    window.addEventListener('DOMContentLoaded', function() {
+      const audio = document.getElementById('musik-libur');
+      audio.play().catch(() => {
+        // Jika autoplay diblokir, user harus interaksi untuk memutar musik
+        document.body.addEventListener('click', function() {
+          audio.play();
+        }, { once: true });
+      });
+    });
+  </script>
 </body>
 </html>
