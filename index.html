@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Kedai Libur</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: #F3C6E6;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .center-img {
+      width: 100vw;
+      max-width: 600px;
+      display: block;
+      margin: 0 auto;
+      animation: pulse 2s infinite;
+      transition: box-shadow 0.3s;
+      box-shadow: 0 0 32px 0 rgba(243, 198, 230, 0.5);
+      border-radius: 24px;
+    }
+    @keyframes pulse {
+      0% { transform: scale(1); box-shadow: 0 0 32px 0 rgba(243, 198, 230, 0.5);}
+      50% { transform: scale(1.05); box-shadow: 0 0 48px 4px rgba(243, 198, 230, 0.8);}
+      100% { transform: scale(1); box-shadow: 0 0 32px 0 rgba(243, 198, 230, 0.5);}
+    }
+  </style>
+</head>
+<body>
+  <img src="libur.webp" alt="Libur Harinfood" class="center-img">
+</body>
+</html>
