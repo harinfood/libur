@@ -75,32 +75,16 @@
 </head>
 <body>
   <img src="libur.webp" alt="Libur Harinfood" class="center-img">
-  <audio id="musik-libur" src="libur.mp3" autoplay loop></audio>
+  <audio id="musik-libur" src="libur.mp3" loop></audio>
   <div class="game-container">
     <div class="game-title">KE HARINFOOD</div>
     <canvas id="dino-game" width="560" height="120"></canvas>
-    <div class="game-info" id="game-info">Sentuh layar atau tekan spasi untuk melompat!</div>
+    <div class="game-info" id="game-info">Sentuh layar atau klik/tap di area ini untuk mulai!</div>
   </div>
   <script>
-    // Musik autoplay handler
-    window.addEventListener('DOMContentLoaded', function() {
-      const audio = document.getElementById('musik-libur');
-      audio.play().catch(() => {
-        document.body.addEventListener('click', function() {
-          audio.play();
-        }, { once: true });
-      });
-    });
-
-    // Dino Game Responsive
+    // Responsive canvas
     const canvas = document.getElementById('dino-game');
     const ctx = canvas.getContext('2d');
-
-    // Load harinfood image
-    const harinfoodImg = new Image();
-    harinfoodImg.src = 'harinfood.webp';
-
-    // Responsive canvas
     function resizeCanvas() {
       const deviceWidth = Math.min(window.innerWidth - 40, 560);
       canvas.width = deviceWidth;
@@ -108,6 +92,10 @@
     }
     resizeCanvas();
     window.addEventListener('resize', resizeCanvas);
+
+    // Load harinfood image
+    const harinfoodImg = new Image();
+    harinfoodImg.src = 'harinfood.webp';
 
     // Dino properties
     let dino = {
@@ -122,12 +110,16 @@
     let score = 0;
     let gameOver = false;
     let speed = 3.2;
+    let gameStarted = false;
+
+    // Musik
+    const audio = document.getElementById('musik-libur');
+    let musikStarted = false;
 
     function drawDino() {
-      if (harinfoodImg.complete) {
+      if (harinfoodImg.complete && harinfoodImg.naturalWidth !== 0) {
         ctx.drawImage(harinfoodImg, dino.x, dino.y, dino.width, dino.height);
       } else {
-        // Jika gambar belum selesai loading, tampilkan kotak hijau
         ctx.save();
         ctx.fillStyle = "#34a853";
         ctx.fillRect(dino.x, dino.y, dino.width, dino.height);
@@ -150,6 +142,18 @@
       ctx.restore();
     }
 
+    function drawStartScreen() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.save();
+      ctx.font = "bold 22px Arial";
+      ctx.fillStyle = "#8d35a7";
+      ctx.textAlign = "center";
+      ctx.fillText("Tekan untuk mulai game kawan!", canvas.width / 2, 70);
+      ctx.restore();
+      // Tampilkan dino diam di bawah
+      drawDino();
+    }
+
     function resetGame() {
       dino.y = 80;
       dino.vy = 0;
@@ -162,15 +166,20 @@
     }
 
     function loop() {
+      if (!gameStarted) {
+        drawStartScreen();
+        return;
+      }
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       if (gameOver) {
         ctx.save();
         ctx.font = "bold 26px Arial";
         ctx.fillStyle = "#d2226d";
-        ctx.fillText("Game Over!", canvas.width/2 - 75, 60);
+        ctx.textAlign = "center";
+        ctx.fillText("Game Over!", canvas.width/2, 60);
         ctx.font = "bold 16px Arial";
         ctx.fillStyle = "#8d35a7";
-        ctx.fillText("Sentuh layar atau tekan Enter untuk main lagi", canvas.width/2 - 145, 90);
+        ctx.fillText("Sentuh layar atau tekan Enter untuk main lagi", canvas.width/2, 90);
         ctx.restore();
         return;
       }
@@ -212,8 +221,27 @@
       requestAnimationFrame(loop);
     }
 
+    // Mulai Musik dan Game saat disentuh/klik pertama kali
+    function startGameAndMusic() {
+      if (!musikStarted) {
+        audio.currentTime = 0;
+        audio.play().then(() => {
+          musikStarted = true;
+        }).catch((e) => {
+          // Jika gagal, bisa karena browser butuh event langsung
+          // Musik akan dicoba lagi pada interaksi berikutnya
+        });
+      }
+      if (!gameStarted) {
+        gameStarted = true;
+        document.getElementById("game-info").textContent = "Sentuh layar atau tekan spasi untuk melompat!";
+        loop();
+      }
+    }
+
     // Kontrol: Spasi dan Sentuhan layar
     function lompat() {
+      if (!gameStarted) return;
       if (!dino.isJumping && !gameOver) {
         dino.vy = dino.jump;
         dino.isJumping = true;
@@ -223,17 +251,29 @@
       }
     }
     document.addEventListener('keydown', function(e) {
-      if (e.code === "Space") {
-        lompat();
-      }
-      if (gameOver && e.code === "Enter") {
-        resetGame();
+      if (!gameStarted && (e.code === "Space" || e.code === "Enter")) {
+        startGameAndMusic();
+      } else if (gameStarted) {
+        if (e.code === "Space") lompat();
+        if (gameOver && e.code === "Enter") resetGame();
       }
     });
-    canvas.addEventListener('touchstart', lompat);
-    canvas.addEventListener('mousedown', lompat);
+    canvas.addEventListener('touchstart', function() {
+      startGameAndMusic();
+      lompat();
+    });
+    canvas.addEventListener('mousedown', function() {
+      startGameAndMusic();
+      lompat();
+    });
 
-    // Pastikan gambar ter-load saat pertama kali
+    // Untuk mobile, sentuh seluruh area body juga bisa mulai game dan musik
+    function globalStart(e) {
+      startGameAndMusic();
+    }
+    document.body.addEventListener('touchstart', globalStart);
+    document.body.addEventListener('mousedown', globalStart);
+
     harinfoodImg.onload = function() {
       loop();
     };
