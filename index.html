@@ -37,9 +37,8 @@
       width: calc(100vw - 40px);
       max-width: 600px;
       margin: 30px auto 0 auto;
-      /* background: none;  <-- background dihapus */
       border-radius: 16px;
-      box-shadow: none; /* box-shadow dihapus */
+      box-shadow: none;
       padding: 20px 0;
       display: flex;
       flex-direction: column;
@@ -53,7 +52,7 @@
       margin-bottom: 10px;
       letter-spacing: 1px;
       text-align: center;
-      background: none; /* supaya transparan */
+      background: none;
     }
     canvas {
       background: #F3C6E6;
@@ -78,9 +77,9 @@
   <img src="libur.webp" alt="Libur Harinfood" class="center-img">
   <audio id="musik-libur" src="libur.mp3" autoplay loop></audio>
   <div class="game-container">
-    <div class="game-title"></div>
+    <div class="game-title">KE HARINFOOD</div>
     <canvas id="dino-game" width="560" height="120"></canvas>
-    <div class="game-info" id="game-info">Harinfood jumper Sentuh layar atau tekan spasi untuk melompat!</div>
+    <div class="game-info" id="game-info">Sentuh layar atau tekan spasi untuk melompat!</div>
   </div>
   <script>
     // Musik autoplay handler
@@ -96,6 +95,10 @@
     // Dino Game Responsive
     const canvas = document.getElementById('dino-game');
     const ctx = canvas.getContext('2d');
+
+    // Load harinfood image
+    const harinfoodImg = new Image();
+    harinfoodImg.src = 'harinfood.webp';
 
     // Responsive canvas
     function resizeCanvas() {
@@ -118,18 +121,18 @@
     let obstacleInterval = 0;
     let score = 0;
     let gameOver = false;
-    let speed = 3.2; // Lebih lambat untuk HP
+    let speed = 3.2;
 
     function drawDino() {
-      ctx.save();
-      ctx.fillStyle = "#34a853";
-      ctx.fillRect(dino.x, dino.y, dino.width, dino.height);
-      // Dino eye
-      ctx.beginPath();
-      ctx.arc(dino.x + 26, dino.y + 12, 3, 0, 2 * Math.PI);
-      ctx.fillStyle = "#222";
-      ctx.fill();
-      ctx.restore();
+      if (harinfoodImg.complete) {
+        ctx.drawImage(harinfoodImg, dino.x, dino.y, dino.width, dino.height);
+      } else {
+        // Jika gambar belum selesai loading, tampilkan kotak hijau
+        ctx.save();
+        ctx.fillStyle = "#34a853";
+        ctx.fillRect(dino.x, dino.y, dino.width, dino.height);
+        ctx.restore();
+      }
     }
 
     function drawObstacle(obs) {
@@ -154,7 +157,7 @@
       obstacleInterval = 0;
       score = 0;
       gameOver = false;
-      document.getElementById("game-info").textContent = "~HARINFOOD JUMPER~ Sentuh layar atau tekan spasi untuk melompat!";
+      document.getElementById("game-info").textContent = "Sentuh layar atau tekan spasi untuk melompat!";
       loop();
     }
 
@@ -215,7 +218,6 @@
         dino.vy = dino.jump;
         dino.isJumping = true;
       }
-      // Jika game over, sentuh layar untuk main lagi
       if (gameOver) {
         resetGame();
       }
@@ -228,10 +230,13 @@
         resetGame();
       }
     });
-    // Sentuhan layar atau klik
     canvas.addEventListener('touchstart', lompat);
     canvas.addEventListener('mousedown', lompat);
 
+    // Pastikan gambar ter-load saat pertama kali
+    harinfoodImg.onload = function() {
+      loop();
+    };
     loop();
   </script>
 </body>
