@@ -98,6 +98,36 @@
       min-width: 240px;
       max-width: 80vw;
       letter-spacing: 2px;
+      position: relative;
+    }
+    #popup-close {
+      position: absolute;
+      top: 18px;
+      right: 22px;
+      font-size: 2rem;
+      color: #d2226d;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+      z-index: 1;
+      padding: 0;
+      line-height: 1;
+      transition: color 0.2s;
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      outline: none;
+    }
+    #popup-close:active,
+    #popup-close:focus {
+      background: #f3c6e6;
+    }
+    #popup-close:hover {
+      color: #8d35a7;
     }
     #popup-score-content .skor-value {
       color: #8d35a7;
@@ -119,15 +149,16 @@
   <img src="libur.webp" alt="Libur Harinfood" class="center-img">
   <audio id="musik-libur" src="libur.mp3" loop></audio>
   <div class="game-container">
-    <div class="game-title">MENUJU KE HARINFOOD</div>
+    <div class="game-title">Permainan Dino Sederhana</div>
     <canvas id="dino-game" width="560" height="120"></canvas>
-    <div class="game-info" id="game-info">maaf mungkin ada banyak rintangan menuju kedai</div>
+    <div class="game-info" id="game-info">Sentuh layar atau klik/tap di area ini untuk mulai!</div>
   </div>
   <div id="popup-score">
     <div id="popup-score-content">
+      <button id="popup-close" title="Tutup" tabindex="0">&times;</button>
       <span>GAME OVER!</span>
       <span class="skor-value" id="skor-value">0</span>
-      <span class="popup-info">Sentuh layar atau tekan Enter untuk main lagi</span>
+      <span class="popup-info">Tekan tombol &times; untuk mulai ulang</span>
     </div>
   </div>
   <script>
@@ -168,6 +199,7 @@
     // Pop up skor
     const popupScore = document.getElementById('popup-score');
     const skorValue = document.getElementById('skor-value');
+    const popupClose = document.getElementById('popup-close');
 
     function playMusicOnce() {
       if (!musikHasPlayed) {
@@ -213,7 +245,7 @@
       ctx.font = "bold 22px Arial";
       ctx.fillStyle = "#8d35a7";
       ctx.textAlign = "center";
-      ctx.fillText("", canvas.width / 2, 70);
+      ctx.fillText("Sentuh layar atau klik/tap untuk mulai!", canvas.width / 2, 70);
       ctx.restore();
       drawDino();
     }
@@ -233,6 +265,7 @@
     function showPopupSkor() {
       skorValue.innerText = score;
       popupScore.style.display = "flex";
+      popupClose.focus();
     }
 
     function loop() {
@@ -293,24 +326,23 @@
         dino.vy = dino.jump;
         dino.isJumping = true;
       }
-      if (gameOver) {
-        resetGame();
-      }
+      // Tidak resetGame di sini, hanya tombol X yang bisa reset
     }
 
     document.addEventListener('keydown', function(e) {
       if (!gameStarted && (e.code === "Space" || e.code === "Enter")) {
         startGameAndMusic();
-      } else if (gameStarted) {
+      } else if (gameStarted && !gameOver) {
         if (e.code === "Space") lompat();
-        if (gameOver && e.code === "Enter") resetGame();
+      } else if (gameOver && (e.code === "Enter" || e.code === "Space")) {
+        resetGame();
       }
     });
 
     function globalTap(e) {
       if (!gameStarted) {
         startGameAndMusic();
-      } else {
+      } else if (!gameOver) {
         lompat();
       }
       e.preventDefault();
@@ -318,13 +350,30 @@
     document.body.addEventListener('touchstart', globalTap, { passive: false });
     document.body.addEventListener('mousedown', globalTap);
 
-    popupScore.addEventListener('touchstart', function(e){
+    // Tombol close (X) di pop up
+    popupClose.addEventListener('click', function(e){
       resetGame();
       e.preventDefault();
+      e.stopPropagation();
+    });
+    popupClose.addEventListener('touchstart', function(e){
+      resetGame();
+      e.preventDefault();
+      e.stopPropagation();
+    }, { passive: false });
+
+    // Prevent close pop up dengan tap di luar tombol X
+    popupScore.addEventListener('touchstart', function(e){
+      if (e.target !== popupClose) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
     }, { passive: false });
     popupScore.addEventListener('mousedown', function(e){
-      resetGame();
-      e.preventDefault();
+      if (e.target !== popupClose) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
     });
 
     harinfoodImg.onload = function() {
