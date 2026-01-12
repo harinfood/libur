@@ -8,7 +8,7 @@
     body {
       margin: 0;
       padding: 0;
-      background: #F3C6E6;
+      background: #229ad2;
       min-height: 100vh;
       box-sizing: border-box;
       font-family: 'Segoe UI', Arial, sans-serif;
@@ -27,14 +27,14 @@
       display: block;
       margin: 40px auto 0 auto;
       animation: pulse 2s infinite;
-      box-shadow: 0 0 32px 0 rgba(243, 198, 230, 0.5);
+      box-shadow: 0 0 32px 0 rgb(254,254,254);
       border-radius: 24px;
       transition: box-shadow 0.3s;
     }
     @keyframes pulse {
-      0% { transform: scale(1); box-shadow: 0 0 32px 0 rgba(243, 198, 230, 0.5);}
-      50% { transform: scale(1.05); box-shadow: 0 0 48px 4px rgba(243, 198, 230, 0.8);}
-      100% { transform: scale(1); box-shadow: 0 0 32px 0 rgba(243, 198, 230, 0.5);}
+      0% { transform: scale(1); box-shadow: 0 0 32px 0 rgba(89,89,89,0.5);}
+      50% { transform: scale(1.05); box-shadow: 0 0 48px 4px rgb(255,255,255);}
+      100% { transform: scale(1); box-shadow: 0 0 32px 0 rgba(255,255,255,0.5);}
     }
     audio { display: none; }
     .game-container {
@@ -52,18 +52,18 @@
     .game-title {
       font-size: 1.2rem;
       font-weight: bold;
-      color: #8d35a7;
+      color: #000000;
       margin-bottom: 10px;
       letter-spacing: 1px;
       text-align: center;
       background: none;
     }
     canvas {
-      background: #F3C6E6;
+      background: #ffffff;
       border-radius: 8px;
       display: block;
       margin: 0 auto;
-      box-shadow: 0 2px 10px rgba(243, 198, 230, 0.2);
+      box-shadow: 0 2px 10px rgba(159,159,159,0.2);
       width: 100%;
       height: 120px;
       max-width: 560px;
@@ -71,7 +71,7 @@
     .game-info {
       margin-top: 10px;
       font-size: 1rem;
-      color: #8d35a7;
+      color: #000000;
       text-align: center;
       background: none;
     }
@@ -84,7 +84,7 @@
       align-items: center;
       justify-content: center;
       z-index: 9999;
-      background: rgba(243,198,230,0.92);
+      background: #229ad2;
     }
     #popup-score-content {
       background: #fff;
@@ -144,7 +144,7 @@
     }
     #popup-close:active,
     #popup-close:focus {
-      background: #f3c6e6;
+      background: #727272;
     }
     #popup-close:hover {
       color: #8d35a7;
@@ -274,7 +274,39 @@
       0% {transform: rotate(0deg);}
       100% {transform: rotate(360deg);}
     }
-  </style>
+  
+#hud{
+  position:fixed;
+  top:10px;
+  left:50%;
+  transform:translateX(-50%);
+  background:rgba(0,0,0,0.4);
+  color:#fff;
+  padding:6px 14px;
+  border-radius:20px;
+  font-family:Arial, sans-serif;
+  font-size:14px;
+  display:flex;
+  gap:15px;
+  z-index:10;
+}
+
+#levelup{
+  position:fixed;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  background:#ff9800;
+  color:#fff;
+  padding:20px 40px;
+  border-radius:20px;
+  font-size:32px;
+  display:none;
+  z-index:20;
+}
+</style>
+
+
   <!-- html2canvas for screenshot -->
   <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 </head>
@@ -285,7 +317,16 @@
   <div class="game-container">
     <div class="game-title">Permainan menuju ke HARINFOOD</div>
     <canvas id="dino-game" width="560" height="120"></canvas>
-    <div class="game-info" id="game-info">Sentuh layar atau klik/tap di area ini untuk mulai!</div>
+<div id="levelup">LEVEL UP!</div>
+
+<!--
+  <div id="hud">
+    <span id="level">LEVEL: 1</span>
+    <span id="speed">SPEED: 1x</span>
+  </div>
+-->
+
+    <div class="game-info" id="game-info">Tap layar atau klik untuk mulai !</div>
   </div>
   <div id="popup-score">
     <div id="popup-score-content">
@@ -327,7 +368,8 @@
     let obstacles = [];
     let obstacleInterval = 0;
     let score = 0;
-    let gameOver = false;
+    let lives = 3;
+let gameOver = false;
     let speed = 3.2;
     let gameStarted = false;
 
@@ -412,7 +454,7 @@
 
     function drawObstacle(obs) {
       ctx.save();
-      ctx.fillStyle = "#c972a9";
+      ctx.fillStyle = "#229ad2";
       ctx.fillRect(obs.x, obs.y, obs.width, obs.height);
       ctx.restore();
     }
@@ -493,9 +535,9 @@
       // 3. Skor >= 500: cibay 1
       if (score >= 1000) {
         hadiahObj = { nameArr: ['Risol 1', 'Cibay 1'], utama: true };
-      } else if (score >= 700) {
+      } else if (score >= 900) {
         hadiahObj = { nameArr: ['Risol'], utama: false };
-      } else if (score >= 500) {
+      } else if (score >= 700) {
         hadiahObj = { nameArr: ['Cibay 1'], utama: false };
       }
       showHadiahAnim(hadiahObj);
@@ -537,7 +579,7 @@
           dino.x < obstacles[i].x + obstacles[i].width &&
           dino.y + dino.height > obstacles[i].y
         ) {
-          gameOver = true;
+          lives--; if(lives<=0){ gameOver = true; }
         }
       }
       obstacles = obstacles.filter(o => o.x + o.width > 0);
