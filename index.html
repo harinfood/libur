@@ -533,11 +533,11 @@ let gameOver = false;
       // 1. Skor >= 1000: risol 1 + cibay 1 (hadiah utama)
       // 2. Skor >= 700: risol
       // 3. Skor >= 500: cibay 1
-      if (score >= 1000) {
+      if (score >= 2000) {
         hadiahObj = { nameArr: ['Risol 1', 'Cibay 1'], utama: true };
-      } else if (score >= 900) {
+      } else if (score >= 1500) {
         hadiahObj = { nameArr: ['Risol'], utama: false };
-      } else if (score >= 700) {
+      } else if (score >= 1000) {
         hadiahObj = { nameArr: ['Cibay 1'], utama: false };
       }
       showHadiahAnim(hadiahObj);
