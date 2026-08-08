@@ -72,7 +72,7 @@
             background-size: 30px 30px;
             background-position: 0 0, 15px 15px;
             overflow-x: hidden;
-            cursor: pointer; /* Indikasi bahwa seluruh layar dapat diklik */
+            cursor: pointer;
         }
 
         /* Wave visualizer animation */
@@ -176,8 +176,8 @@
                     
                     <!-- Gelembung Percakapan (Speech Bubble) -->
                     <div class="bg-white border-2 border-brand-dark px-4 py-2.5 rounded-2xl rounded-bl-none shadow-md mb-3 max-w-[220px] sm:max-w-[280px] text-left animate-bounce-subtle">
-                        <p class="font-fredoka text-xs sm:text-sm text-brand-red font-semibold leading-tight">"Aduh... Maaf ya! Kedai kita lagi tutup..." 🥺</p>
-                        <p class="text-[10px] sm:text-xs text-gray-500 mt-0.5">Bisa datang besok lagi ya kak!</p>
+                        <p class="font-fredoka text-xs sm:text-sm text-brand-red font-semibold leading-tight">"Yah... Kedainya tutup..." 🥺</p>
+                        <p class="text-[10px] sm:text-xs text-gray-500 mt-0.5">Datang besok lagi ya 🥰🥰🥰!</p>
                     </div>
 
                     <!-- Character Image (Ukuran Proporsional & Tanpa Border) -->
@@ -268,7 +268,7 @@
         <span id="toastMsg" class="font-fredoka text-xs sm:text-sm">Notifikasi</span>
     </div>
 
-    <!-- Tawk.to Script Integration -->
+    <!-- Tawk.to Script Integration (Otomatis Dimuat & Siap Digunakan) -->
     <script type="text/javascript">
         var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
         (function(){
@@ -316,9 +316,15 @@
         }
 
         // Menjadikan seluruh area layar sebagai tombol play/pause
+        // dengan proteksi agar tidak mengganggu klik pada Tawk.to widget / progress bar
         document.body.addEventListener('click', (e) => {
-            // Hindari memicu toggle audio jika user melakukan klik pada slider progress bar
-            if (e.target.closest('#progressBar') || e.target.closest('.cursor-pointer')) {
+            if (
+                e.target.closest('#progressBar') || 
+                e.target.closest('.cursor-pointer') ||
+                e.target.closest('iframe') ||
+                e.target.closest('[id*="tawk"]') ||
+                e.target.tagName === 'IFRAME'
+            ) {
                 return;
             }
             toggleAudio(e);
