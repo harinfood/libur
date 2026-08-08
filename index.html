@@ -1,47 +1,399 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Harinfood Sedang Libur</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kedai Harinfood - Sedang Libur 💤</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-<link rel="stylesheet" href="style.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            red: '#E53935',
+                            yellow: '#FFC107',
+                            cream: '#FFF9F2',
+                            pink: '#FFEDE8',
+                            dark: '#2D2323',
+                            accent: '#FF6B6B',
+                            green: '#4CAF50'
+                        }
+                    },
+                    fontFamily: {
+                        fredoka: ['Fredoka', 'sans-serif'],
+                        jakarta: ['Plus Jakarta Sans', 'sans-serif'],
+                    },
+                    animation: {
+                        'bounce-slow': 'bounce 2.5s infinite',
+                        'bounce-subtle': 'bounceSubtle 2s ease-in-out infinite',
+                        'walk-approach': 'walkApproach 7s ease-in-out infinite',
+                        'walking-feet': 'walkingFeet 0.5s ease-in-out infinite alternate',
+                        'float-soft': 'floatSoft 3s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        bounceSubtle: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-6px)' },
+                        },
+                        walkApproach: {
+                            '0%': { transform: 'translateX(-160px)', opacity: '0' },
+                            '15%': { opacity: '1' },
+                            '65%': { transform: 'translateX(0px)', opacity: '1' },
+                            '90%': { transform: 'translateX(0px)', opacity: '1' },
+                            '100%': { transform: 'translateX(0px)', opacity: '1' }
+                        },
+                        walkingFeet: {
+                            '0%': { transform: 'translateY(0) rotate(-3deg)' },
+                            '100%': { transform: 'translateY(-6px) rotate(3deg)' }
+                        },
+                        floatSoft: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-8px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #FFF9F2;
+            background-image: radial-gradient(#FFC107 0.75px, transparent 0.75px), radial-gradient(#FFC107 0.75px, #FFF9F2 0.75px);
+            background-size: 30px 30px;
+            background-position: 0 0, 15px 15px;
+            overflow-x: hidden;
+            cursor: pointer; /* Indikasi bahwa seluruh layar dapat diklik */
+        }
+
+        /* Wave visualizer animation */
+        .bar {
+            animation: soundWave 1.2s ease-in-out infinite alternate;
+        }
+        .bar:nth-child(1) { animation-delay: 0.1s; }
+        .bar:nth-child(2) { animation-delay: 0.3s; }
+        .bar:nth-child(3) { animation-delay: 0.5s; }
+        .bar:nth-child(4) { animation-delay: 0.2s; }
+        .bar:nth-child(5) { animation-delay: 0.4s; }
+
+        @keyframes soundWave {
+            0% { height: 6px; }
+            100% { height: 28px; }
+        }
+
+        .paused .bar {
+            animation-play-state: paused;
+            height: 6px;
+        }
+
+        /* Glassmorphic card */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.94);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 2px solid rgba(255, 193, 7, 0.4);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #FFF9F2;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #FFC107;
+            border-radius: 10px;
+        }
+    </style>
 </head>
-<body>
+<body class="text-brand-dark min-h-screen flex flex-col justify-between selection:bg-brand-yellow selection:text-brand-dark select-none">
 
-<div class="forest"></div>
+    <!-- Audio Element dengan Jalur Ganda (Fallback Canvas & Lokal) -->
+    <audio id="harinAudio" preload="auto">
+        <source src="uploaded:aduh.mp3" type="audio/mpeg">
+        <source src="aduh.mp3" type="audio/mpeg">
+        <source src="http://googleusercontent.com/file_content/0" type="audio/mpeg">
+        Browser kamu tidak mendukung pemutar suara.
+    </audio>
 
-<div class="leaf leaf1">🍃</div>
-<div class="leaf leaf2">🍃</div>
-<div class="leaf leaf3">🍃</div>
-<div class="leaf leaf4">🍃</div>
-
-<div class="scene">
-
-    <img src="libur.png" class="shop" alt="Harinfood Tutup">
-
-    <img src="harinfood.webp" class="girl" alt="Anak Datang">
-
-</div>
-
-<div class="message">
-    <h1>🌿 Harinfood Sedang Libur 🌿</h1>
-
-    <p>
-        Mohon maaf, kedai sedang libur sementara.
-        Silakan kembali lagi pada jam operasional berikutnya.
-    </p>
-
-    <div class="info">
-        Terima kasih atas kunjungannya ❤️
+    <!-- Announcement Top Bar -->
+    <div class="bg-gradient-to-r from-brand-red via-brand-accent to-brand-red text-white text-center py-2.5 px-4 font-fredoka text-sm sm:text-base shadow-sm tracking-wide flex items-center justify-center gap-2">
+        <span class="inline-block animate-bounce-slow">🍱</span>
+        <span>Kedai Harinfood Sedang Istirahat Dulu Ya Kak! Buka Kembali Besok!</span>
+        <span class="inline-block animate-bounce-slow">✨</span>
     </div>
-</div>
 
-<audio id="music" autoplay loop>
-    <source src="aduh.mp3" type="audio/mpeg">
-</audio>
+    <!-- Header Navigation -->
+    <header class="container mx-auto px-4 py-4 flex justify-between items-center">
+        <div class="flex items-center gap-3">
+            <div class="w-12 h-12 bg-brand-yellow rounded-2xl flex items-center justify-center shadow-md border-2 border-brand-dark transform -rotate-3 hover:rotate-0 transition-transform">
+                <span class="font-fredoka text-2xl font-bold text-brand-red">H</span>
+            </div>
+            <div>
+                <h1 class="font-fredoka text-2xl font-bold tracking-wider text-brand-red leading-none">HARINFOOD</h1>
+                <p class="text-xs text-gray-500 font-medium">Jajanan & Makanan Lezat</p>
+            </div>
+        </div>
 
-<script src="script.js"></script>
+        <div class="flex items-center gap-2">
+            <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-red-100 border border-red-300 text-red-600 text-xs font-bold">
+                <span class="w-2.5 h-2.5 rounded-full bg-red-500 animate-ping"></span>
+                SEDANG LIBUR 💤
+            </span>
+        </div>
+    </header>
 
+    <!-- Main Content Area -->
+    <main class="container mx-auto px-4 py-4 max-w-4xl flex-grow flex flex-col items-center justify-center">
+
+        <!-- Store Closed Main Card -->
+        <div class="glass-card rounded-3xl p-6 sm:p-10 shadow-xl w-full text-center relative overflow-hidden my-2">
+            
+            <!-- Audio Notice Banner (Penunjuk Layar) -->
+            <div id="audioNotice" class="bg-gradient-to-r from-amber-100 via-amber-200 to-amber-100 text-amber-900 border-2 border-amber-400 px-5 py-2.5 rounded-2xl text-xs sm:text-sm font-fredoka mb-6 flex items-center justify-center gap-2 shadow-md animate-pulse">
+                <span>🔊</span>
+                <span>Klik / Sentuh layar di mana saja untuk memutar atau menghentikan pesan suara kedai!</span>
+            </div>
+
+            <!-- ANIMATION SCENE: harinfood.webp berjalan mendatangi libur.png (Gambar Libur Diperbesar & Tanpa Border) -->
+            <div class="relative w-full max-w-4xl mx-auto h-80 sm:h-[450px] md:h-[520px] flex items-end justify-between px-2 sm:px-8 my-4 overflow-hidden border-b-2 border-dashed border-amber-300 pb-3">
+                
+                <!-- Jalur Jalan / Ground Decor -->
+                <div class="absolute bottom-2 left-0 right-0 h-2.5 bg-amber-200/80 rounded-full"></div>
+
+                <!-- harinfood.webp (Berjalan Mendatangi Kedai - Tanpa Border) -->
+                <div class="relative z-10 flex flex-col items-center animate-walk-approach mb-2">
+                    
+                    <!-- Gelembung Percakapan (Speech Bubble) -->
+                    <div class="bg-white border-2 border-brand-dark px-4 py-2.5 rounded-2xl rounded-bl-none shadow-md mb-3 max-w-[220px] sm:max-w-[280px] text-left animate-bounce-subtle">
+                        <p class="font-fredoka text-xs sm:text-sm text-brand-red font-semibold leading-tight">"Aduh... Maaf ya! Kedai kita lagi tutup..." 🥺</p>
+                        <p class="text-[10px] sm:text-xs text-gray-500 mt-0.5">Bisa datang besok lagi ya kak!</p>
+                    </div>
+
+                    <!-- Character Image (Ukuran Proporsional & Tanpa Border) -->
+                    <img src="uploaded:harinfood.webp-0251ff37-5502-416e-8c06-0b4512cf6f9c" 
+                         onerror="this.onerror=null; this.src='harinfood.webp';" 
+                         alt="Anak Harinfood" 
+                         class="h-40 sm:h-56 md:h-64 object-contain animate-walking-feet filter drop-shadow-md">
+                </div>
+
+                <!-- libur.png (Kedai Tutup - Ukuran Jauh Lebih Besar, Jelas & Tanpa Border) -->
+                <div class="relative z-10 flex flex-col items-center justify-end h-full">
+                    <img src="uploaded:libur.png-fe9cdb4a-2797-4bc1-afce-5e91ac736345" 
+                         onerror="this.onerror=null; this.src='libur.png';" 
+                         alt="Harinfood Tutup" 
+                         class="h-64 sm:h-96 md:h-[440px] object-contain filter drop-shadow-xl pointer-events-none">
+                </div>
+
+            </div>
+
+            <!-- Audio Player Indicator Card -->
+            <div class="max-w-md mx-auto bg-amber-50/90 border-2 border-amber-300 rounded-2xl p-3.5 shadow-inner flex items-center gap-4 my-6">
+                <button id="playAudioBtn" class="w-12 h-12 rounded-xl bg-brand-red hover:bg-red-600 text-white flex items-center justify-center text-xl shadow-md transition-all active:scale-95 flex-shrink-0">
+                    <i id="audioIcon" class="fa-solid fa-play"></i>
+                </button>
+                <div class="flex-grow text-left">
+                    <div class="flex justify-between items-center mb-1">
+                        <span class="font-fredoka text-xs text-brand-dark font-bold">Pesan Suara Kedai (aduh.mp3) 🎙️</span>
+                        <span id="audioTime" class="text-[10px] font-mono text-gray-500">00:00 / 00:00</span>
+                    </div>
+                    <!-- Waveform Visualizer & Progress -->
+                    <div id="visualizer" class="flex items-center gap-1 h-6 paused">
+                        <div class="bar w-1.5 bg-brand-red rounded-full"></div>
+                        <div class="bar w-1.5 bg-brand-yellow rounded-full"></div>
+                        <div class="bar w-1.5 bg-brand-red rounded-full"></div>
+                        <div class="bar w-1.5 bg-brand-accent rounded-full"></div>
+                        <div class="bar w-1.5 bg-brand-yellow rounded-full"></div>
+                        <div class="flex-grow bg-amber-200 h-2 rounded-full ml-2 overflow-hidden cursor-pointer" onclick="seekAudio(event)">
+                            <div id="progressBar" class="bg-brand-red h-full w-0 transition-all duration-200"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Title & Countdown Row -->
+            <div class="mb-4">
+                <h2 class="font-fredoka text-2xl sm:text-3xl font-bold text-brand-dark mb-2">
+                    Kami Buka Kembali Besok Jam 10:00 WIB ⚡
+                </h2>
+                <p class="text-xs sm:text-sm text-gray-500 max-w-md mx-auto mb-4">
+                    Terima kasih telah berkunjung ke Kedai Harinfood. Kami siap melayani pesanan terlezatmu esok hari!
+                </p>
+
+                <!-- Countdown Timer -->
+                <div class="bg-white/90 border-2 border-amber-300 rounded-2xl p-4 max-w-md mx-auto shadow-sm">
+                    <div class="grid grid-cols-3 gap-3 text-center">
+                        <div class="bg-amber-100/80 rounded-xl p-2 border border-amber-300">
+                            <span id="hours" class="font-fredoka text-2xl sm:text-3xl font-bold text-brand-red">00</span>
+                            <span class="block text-[10px] text-gray-500 font-bold uppercase mt-0.5">Jam</span>
+                        </div>
+                        <div class="bg-amber-100/80 rounded-xl p-2 border border-amber-300">
+                            <span id="minutes" class="font-fredoka text-2xl sm:text-3xl font-bold text-brand-red">00</span>
+                            <span class="block text-[10px] text-gray-500 font-bold uppercase mt-0.5">Menit</span>
+                        </div>
+                        <div class="bg-amber-100/80 rounded-xl p-2 border border-amber-300">
+                            <span id="seconds" class="font-fredoka text-2xl sm:text-3xl font-bold text-brand-red">00</span>
+                            <span class="block text-[10px] text-gray-500 font-bold uppercase mt-0.5">Detik</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="mt-6 border-t-2 border-amber-200 bg-white/70 backdrop-blur-md py-4 px-4">
+        <div class="container mx-auto max-w-4xl text-center">
+            <p class="font-fredoka text-xs text-gray-500">
+                &copy; <span id="year"></span> Kedai Harinfood. Dibuat dengan kasih sayang 💖
+            </p>
+        </div>
+    </footer>
+
+    <!-- Custom Notification Toast -->
+    <div id="toast" class="fixed bottom-6 left-1/2 transform -translate-x-1/2 bg-brand-dark text-white px-6 py-2.5 rounded-full shadow-2xl z-50 translate-y-20 opacity-0 transition-all duration-300 flex items-center gap-2 pointer-events-none">
+        <span id="toastIcon">✨</span>
+        <span id="toastMsg" class="font-fredoka text-xs sm:text-sm">Notifikasi</span>
+    </div>
+
+    <!-- Tawk.to Script Integration -->
+    <script type="text/javascript">
+        var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
+        (function(){
+            var s1 = document.createElement("script"), s0 = document.getElementsByTagName("script")[0];
+            s1.async = true;
+            s1.src = 'https://embed.tawk.to/687a5f045100991915b4e88b/1j0f06avl';
+            s1.charset = 'UTF-8';
+            s1.setAttribute('crossorigin','*');
+            s0.parentNode.insertBefore(s1,s0);
+        })();
+    </script>
+
+    <!-- Main Logic Script -->
+    <script>
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        /* ===================================================
+           AUDIO VOICE NOTE CONTROLS (SCREEN-WIDE PLAY BUTTON)
+        =================================================== */
+        const audio = document.getElementById('harinAudio');
+        const audioIcon = document.getElementById('audioIcon');
+        const visualizer = document.getElementById('visualizer');
+        const progressBar = document.getElementById('progressBar');
+        const audioTime = document.getElementById('audioTime');
+        const audioNotice = document.getElementById('audioNotice');
+
+        function toggleAudio(e) {
+            if (e) e.stopPropagation();
+            if (audioNotice) audioNotice.style.display = 'none';
+
+            if (audio.paused) {
+                audio.play().then(() => {
+                    audioIcon.className = "fa-solid fa-pause";
+                    visualizer.classList.remove('paused');
+                    showToast("Memutar pesan suara Kedai Harinfood... 🎙️", "🔊");
+                }).catch(err => {
+                    showToast("Ketuk layar sekali lagi untuk memutar suara!", "⚠️");
+                });
+            } else {
+                audio.pause();
+                audioIcon.className = "fa-solid fa-play";
+                visualizer.classList.add('paused');
+                showToast("Pesan suara dihentikan ⏸️", "🔇");
+            }
+        }
+
+        // Menjadikan seluruh area layar sebagai tombol play/pause
+        document.body.addEventListener('click', (e) => {
+            // Hindari memicu toggle audio jika user melakukan klik pada slider progress bar
+            if (e.target.closest('#progressBar') || e.target.closest('.cursor-pointer')) {
+                return;
+            }
+            toggleAudio(e);
+        });
+
+        audio.addEventListener('timeupdate', () => {
+            if (audio.duration) {
+                const pct = (audio.currentTime / audio.duration) * 100;
+                progressBar.style.width = pct + '%';
+                
+                const curMins = Math.floor(audio.currentTime / 60);
+                const curSecs = Math.floor(audio.currentTime % 60);
+                const durMins = Math.floor(audio.duration / 60) || 0;
+                const durSecs = Math.floor(audio.duration % 60) || 0;
+
+                const curFormatted = `${curMins < 10 ? '0' : ''}${curMins}:${curSecs < 10 ? '0' : ''}${curSecs}`;
+                const durFormatted = `${durMins < 10 ? '0' : ''}${durMins}:${durSecs < 10 ? '0' : ''}${durSecs}`;
+
+                audioTime.textContent = `${curFormatted} / ${durFormatted}`;
+            }
+        });
+
+        audio.addEventListener('ended', () => {
+            audioIcon.className = "fa-solid fa-play";
+            visualizer.classList.add('paused');
+            progressBar.style.width = '0%';
+        });
+
+        function seekAudio(e) {
+            e.stopPropagation();
+            const rect = e.currentTarget.getBoundingClientRect();
+            const clickPos = (e.clientX - rect.left) / rect.width;
+            if (audio.duration) {
+                audio.currentTime = clickPos * audio.duration;
+            }
+        }
+
+        /* ===================================================
+           COUNTDOWN TIMER (Target: Besok Jam 10:00 WIB)
+        =================================================== */
+        function updateCountdown() {
+            const now = new Date();
+            let target = new Date();
+            target.setDate(now.getDate() + 1);
+            target.setHours(10, 0, 0, 0);
+
+            const diff = target - now;
+
+            if (diff > 0) {
+                const hrs = Math.floor(diff / (1000 * 60 * 60));
+                const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                const secs = Math.floor((diff % (1000 * 60)) / 1000);
+
+                document.getElementById('hours').textContent = String(hrs).padStart(2, '0');
+                document.getElementById('minutes').textContent = String(mins).padStart(2, '0');
+                document.getElementById('seconds').textContent = String(secs).padStart(2, '0');
+            }
+        }
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
+
+        /* ===================================================
+           TOAST NOTIFICATION HELPER
+        =================================================== */
+        function showToast(msg, icon = "✨") {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastMsg').textContent = msg;
+            document.getElementById('toastIcon').textContent = icon;
+
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3000);
+        }
+    </script>
 </body>
 </html>
+
